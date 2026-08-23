@@ -661,12 +661,14 @@ dependencies = [
     { name = "certomancer", extra = ["web-api-async"] },
     { name = "pyhanko" },
     { name = "pyhanko-certvalidator" },
-    { name = "requests-mock" },
 ]
 
 [package.optional-dependencies]
 csc = [
     { name = "certomancer-csc-dummy" },
+]
+requests = [
+    { name = "requests-mock" },
 ]
 
 [package.metadata]
@@ -675,9 +677,9 @@ requires-dist = [
     { name = "certomancer-csc-dummy", marker = "extra == 'csc'", specifier = "==0.4.2" },
     { name = "pyhanko", editable = "pkgs/pyhanko" },
     { name = "pyhanko-certvalidator", editable = "pkgs/pyhanko-certvalidator" },
-    { name = "requests-mock", specifier = ">=1.8.0" },
+    { name = "requests-mock", marker = "extra == 'requests'", specifier = ">=1.8.0" },
 ]
-provides-extras = ["csc"]
+provides-extras = ["csc", "requests"]
 
 [[package]]
 name = "coverage"
@@ -931,7 +933,7 @@ name = "exceptiongroup"
 version = "1.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "typing-extensions" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/50/79/66800aadf48771f6b62f7eb014e352e5d06856655206165d775e675a02c9/exceptiongroup-1.3.1.tar.gz", hash = "sha256:8b412432c6055b0b7d14c310000ae93352ed6754f70fa8f7c34141f91c4e3219", size = 30371, upload-time = "2025-11-21T23:01:54.787Z" }
 wheels = [
@@ -1192,6 +1194,7 @@ dependencies = [
     { name = "pytest-aiohttp" },
     { name = "pytest-asyncio" },
     { name = "pytest-cov" },
+    { name = "requests" },
 ]
 
 [package.metadata]
@@ -1208,6 +1211,7 @@ requires-dist = [
     { name = "pytest-aiohttp", specifier = ">=1.0.4,<1.2.0" },
     { name = "pytest-asyncio", specifier = ">=1.1.0,<2.0" },
     { name = "pytest-cov", specifier = ">=4.0,<7.2" },
+    { name = "requests", specifier = ">=2.31.0" },
 ]
 
 [[package]]
@@ -2277,7 +2281,7 @@ dependencies = [
     { name = "asn1crypto" },
     { name = "cryptography" },
     { name = "lxml" },
-    { name = "pyhanko-certvalidator" },
+    { name = "pyhanko-certvalidator", extra = ["async-http"] },
     { name = "tzlocal" },
 ]
 
@@ -2301,13 +2305,14 @@ qr = [
     { name = "qrcode" },
 ]
 requests = [
+    { name = "pyhanko-certvalidator", extra = ["requests"] },
     { name = "requests" },
 ]
 
 [package.dev-dependencies]
 testing = [
     { name = "certomancer", extra = ["web-api-async"] },
-    { name = "common-test-utils", extra = ["csc"] },
+    { name = "common-test-utils", extra = ["csc", "requests"] },
     { name = "freezegun" },
     { name = "pytest" },
     { name = "pytest-aiohttp" },
@@ -2323,7 +2328,6 @@ testing-base = [
     { name = "pytest-aiohttp" },
     { name = "pytest-asyncio" },
     { name = "pytest-cov" },
-    { name = "requests" },
 ]
 testing-pkcs11-setup = [
     { name = "certomancer", extra = ["pkcs11"] },
@@ -2337,7 +2341,8 @@ requires-dist = [
     { name = "fonttools", marker = "extra == 'opentype'", specifier = ">=4.33.3" },
     { name = "lxml", specifier = ">=5.4.0" },
     { name = "pillow", marker = "extra == 'image-support'", specifier = ">=7.2.0" },
-    { name = "pyhanko-certvalidator", editable = "pkgs/pyhanko-certvalidator" },
+    { name = "pyhanko-certvalidator", extras = ["async-http"], editable = "pkgs/pyhanko-certvalidator" },
+    { name = "pyhanko-certvalidator", extras = ["requests"], marker = "extra == 'requests'", editable = "pkgs/pyhanko-certvalidator" },
     { name = "python-barcode", marker = "extra == 'image-support'", specifier = "==0.16.1" },
     { name = "python-pkcs11", marker = "extra == 'pkcs11'", specifier = "~=0.9.3" },
     { name = "qrcode", marker = "extra == 'qr'", specifier = ">=7.3.1" },
@@ -2353,7 +2358,7 @@ provides-extras = ["opentype", "qr", "image-support", "pkcs11", "async-http", "r
 testing = [
     { name = "certomancer", extras = ["web-api-async"], specifier = ">=0.16.0" },
     { name = "common-test-utils", editable = "internal/common-test-utils" },
-    { name = "common-test-utils", extras = ["csc"], editable = "internal/common-test-utils" },
+    { name = "common-test-utils", extras = ["csc", "requests"], editable = "internal/common-test-utils" },
     { name = "freezegun", specifier = ">=1.1.0" },
     { name = "pytest", specifier = ">=6.1.1" },
     { name = "pytest-aiohttp", specifier = ">=1.0.4,<1.2.0" },
@@ -2369,7 +2374,6 @@ testing-base = [
     { name = "pytest-aiohttp", specifier = ">=1.0.4,<1.2.0" },
     { name = "pytest-asyncio", specifier = ">=1.1.0,<2.0" },
     { name = "pytest-cov", specifier = ">=4.0,<7.2" },
-    { name = "requests", specifier = ">=2.31.0" },
 ]
 testing-pkcs11-setup = [{ name = "certomancer", extras = ["pkcs11"], specifier = ">=0.16.0" }]
 
@@ -2378,18 +2382,19 @@ name = "pyhanko-certvalidator"
 version = "0.0.0.dev1"
 source = { editable = "pkgs/pyhanko-certvalidator" }
 dependencies = [
-    { name = "aiohttp" },
     { name = "asn1crypto" },
-    { name = "certifi" },
     { name = "cryptography" },
     { name = "oscrypto" },
-    { name = "requests" },
     { name = "uritools" },
 ]
 
 [package.optional-dependencies]
 async-http = [
     { name = "aiohttp" },
+    { name = "certifi" },
+]
+requests = [
+    { name = "requests" },
 ]
 
 [package.dev-dependencies]
@@ -2399,21 +2404,28 @@ testing-base = [
     { name = "freezegun" },
     { name = "pytest" },
     { name = "pytest-aiohttp" },
+    { name = "pytest-asyncio" },
+    { name = "pytest-cov" },
+    { name = "requests" },
+]
+testing-core = [
+    { name = "freezegun" },
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
     { name = "pytest-cov" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "aiohttp", specifier = ">=3.9,<3.15" },
     { name = "aiohttp", marker = "extra == 'async-http'", specifier = ">=3.9,<3.15" },
     { name = "asn1crypto", specifier = ">=1.5.1" },
-    { name = "certifi", specifier = ">=2023.5.7" },
+    { name = "certifi", marker = "extra == 'async-http'", specifier = ">=2023.5.7" },
     { name = "cryptography", specifier = ">=48.0.0" },
     { name = "oscrypto", specifier = ">=1.1.0" },
-    { name = "requests", specifier = ">=2.31.0" },
+    { name = "requests", marker = "extra == 'requests'", specifier = ">=2.31.0" },
     { name = "uritools", specifier = ">=3.0.1" },
 ]
-provides-extras = ["async-http"]
+provides-extras = ["async-http", "requests"]
 
 [package.metadata.requires-dev]
 testing-base = [
@@ -2422,6 +2434,14 @@ testing-base = [
     { name = "freezegun", specifier = ">=1.1.0" },
     { name = "pytest", specifier = ">=6.1.1" },
     { name = "pytest-aiohttp", specifier = ">=1.0.4,<1.2.0" },
+    { name = "pytest-asyncio", specifier = ">=1.1.0,<2.0" },
+    { name = "pytest-cov", specifier = ">=4.0,<7.2" },
+    { name = "requests", specifier = ">=2.31.0" },
+]
+testing-core = [
+    { name = "freezegun", specifier = ">=1.1.0" },
+    { name = "pytest", specifier = ">=6.1.1" },
+    { name = "pytest-asyncio", specifier = ">=1.1.0,<2.0" },
     { name = "pytest-cov", specifier = ">=4.0,<7.2" },
 ]
 
@@ -2604,7 +2624,7 @@ docs = [
     { name = "sphinx-rtd-theme" },
 ]
 docs-build = [
-    { name = "pyhanko", extras = ["opentype", "qr", "image-support", "pkcs11", "async-http", "etsi"], editable = "pkgs/pyhanko" },
+    { name = "pyhanko", extras = ["opentype", "qr", "image-support", "pkcs11", "etsi"], editable = "pkgs/pyhanko" },
     { name = "pyhanko-certvalidator", editable = "pkgs/pyhanko-certvalidator" },
     { name = "pyhanko-cli", editable = "pkgs/pyhanko-cli" },
     { name = "sphinx" },
@@ -2614,7 +2634,7 @@ docs-doctest = [
     { name = "certomancer", extras = ["web-api", "web-api-async"], specifier = ">=0.15.1" },
     { name = "common-test-utils", editable = "internal/common-test-utils" },
     { name = "freezegun", specifier = ">=1.1.0" },
-    { name = "pyhanko", extras = ["opentype", "qr", "image-support", "pkcs11", "async-http", "etsi"], editable = "pkgs/pyhanko" },
+    { name = "pyhanko", extras = ["opentype", "qr", "image-support", "pkcs11", "etsi"], editable = "pkgs/pyhanko" },
     { name = "pyhanko-certvalidator", editable = "pkgs/pyhanko-certvalidator" },
     { name = "pyhanko-cli", editable = "pkgs/pyhanko-cli" },
     { name = "sphinx" },
@@ -3088,23 +3108,23 @@ resolution-markers = [
     "python_full_version < '3.11'",
 ]
 dependencies = [
-    { name = "alabaster" },
-    { name = "babel" },
-    { name = "colorama", marker = "sys_platform == 'win32'" },
-    { name = "docutils", version = "0.21.2", source = { registry = "https://pypi.org/simple" } },
-    { name = "imagesize" },
-    { name = "jinja2" },
-    { name = "packaging" },
-    { name = "pygments" },
-    { name = "requests" },
-    { name = "snowballstemmer" },
-    { name = "sphinxcontrib-applehelp" },
-    { name = "sphinxcontrib-devhelp" },
-    { name = "sphinxcontrib-htmlhelp" },
-    { name = "sphinxcontrib-jsmath" },
-    { name = "sphinxcontrib-qthelp" },
-    { name = "sphinxcontrib-serializinghtml" },
-    { name = "tomli" },
+    { name = "alabaster", marker = "python_full_version < '3.11'" },
+    { name = "babel", marker = "python_full_version < '3.11'" },
+    { name = "colorama", marker = "python_full_version < '3.11' and sys_platform == 'win32'" },
+    { name = "docutils", version = "0.21.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "imagesize", marker = "python_full_version < '3.11'" },
+    { name = "jinja2", marker = "python_full_version < '3.11'" },
+    { name = "packaging", marker = "python_full_version < '3.11'" },
+    { name = "pygments", marker = "python_full_version < '3.11'" },
+    { name = "requests", marker = "python_full_version < '3.11'" },
+    { name = "snowballstemmer", marker = "python_full_version < '3.11'" },
+    { name = "sphinxcontrib-applehelp", marker = "python_full_version < '3.11'" },
+    { name = "sphinxcontrib-devhelp", marker = "python_full_version < '3.11'" },
+    { name = "sphinxcontrib-htmlhelp", marker = "python_full_version < '3.11'" },
+    { name = "sphinxcontrib-jsmath", marker = "python_full_version < '3.11'" },
+    { name = "sphinxcontrib-qthelp", marker = "python_full_version < '3.11'" },
+    { name = "sphinxcontrib-serializinghtml", marker = "python_full_version < '3.11'" },
+    { name = "tomli", marker = "python_full_version < '3.11'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/6f/6d/be0b61178fe2cdcb67e2a92fc9ebb488e3c51c4f74a36a7824c0adf23425/sphinx-8.1.3.tar.gz", hash = "sha256:43c1911eecb0d3e161ad78611bc905d1ad0e523e4ddc202a58a821773dc4c927", size = 8184611, upload-time = "2024-10-13T20:27:13.93Z" }
 wheels = [
@@ -3119,23 +3139,23 @@ resolution-markers = [
     "python_full_version == '3.11.*'",
 ]
 dependencies = [
-    { name = "alabaster" },
-    { name = "babel" },
-    { name = "colorama", marker = "sys_platform == 'win32'" },
-    { name = "docutils", version = "0.22.4", source = { registry = "https://pypi.org/simple" } },
-    { name = "imagesize" },
-    { name = "jinja2" },
-    { name = "packaging" },
-    { name = "pygments" },
-    { name = "requests" },
-    { name = "roman-numerals" },
-    { name = "snowballstemmer" },
-    { name = "sphinxcontrib-applehelp" },
-    { name = "sphinxcontrib-devhelp" },
-    { name = "sphinxcontrib-htmlhelp" },
-    { name = "sphinxcontrib-jsmath" },
-    { name = "sphinxcontrib-qthelp" },
-    { name = "sphinxcontrib-serializinghtml" },
+    { name = "alabaster", marker = "python_full_version == '3.11.*'" },
+    { name = "babel", marker = "python_full_version == '3.11.*'" },
+    { name = "colorama", marker = "python_full_version == '3.11.*' and sys_platform == 'win32'" },
+    { name = "docutils", version = "0.22.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
+    { name = "imagesize", marker = "python_full_version == '3.11.*'" },
+    { name = "jinja2", marker = "python_full_version == '3.11.*'" },
+    { name = "packaging", marker = "python_full_version == '3.11.*'" },
+    { name = "pygments", marker = "python_full_version == '3.11.*'" },
+    { name = "requests", marker = "python_full_version == '3.11.*'" },
+    { name = "roman-numerals", marker = "python_full_version == '3.11.*'" },
+    { name = "snowballstemmer", marker = "python_full_version == '3.11.*'" },
+    { name = "sphinxcontrib-applehelp", marker = "python_full_version == '3.11.*'" },
+    { name = "sphinxcontrib-devhelp", marker = "python_full_version == '3.11.*'" },
+    { name = "sphinxcontrib-htmlhelp", marker = "python_full_version == '3.11.*'" },
+    { name = "sphinxcontrib-jsmath", marker = "python_full_version == '3.11.*'" },
+    { name = "sphinxcontrib-qthelp", marker = "python_full_version == '3.11.*'" },
+    { name = "sphinxcontrib-serializinghtml", marker = "python_full_version == '3.11.*'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/42/50/a8c6ccc36d5eacdfd7913ddccd15a9cee03ecafc5ee2bc40e1f168d85022/sphinx-9.0.4.tar.gz", hash = "sha256:594ef59d042972abbc581d8baa577404abe4e6c3b04ef61bd7fc2acbd51f3fa3", size = 8710502, upload-time = "2025-12-04T07:45:27.343Z" }
 wheels = [
@@ -3151,23 +3171,23 @@ resolution-markers = [
     "python_full_version >= '3.12' and python_full_version < '3.15'",
 ]
 dependencies = [
-    { name = "alabaster" },
-    { name = "babel" },
-    { name = "colorama", marker = "sys_platform == 'win32'" },
-    { name = "docutils", version = "0.22.4", source = { registry = "https://pypi.org/simple" } },
-    { name = "imagesize" },
-    { name = "jinja2" },
-    { name = "packaging" },
-    { name = "pygments" },
-    { name = "requests" },
-    { name = "roman-numerals" },
-    { name = "snowballstemmer" },
-    { name = "sphinxcontrib-applehelp" },
-    { name = "sphinxcontrib-devhelp" },
-    { name = "sphinxcontrib-htmlhelp" },
-    { name = "sphinxcontrib-jsmath" },
-    { name = "sphinxcontrib-qthelp" },
-    { name = "sphinxcontrib-serializinghtml" },
+    { name = "alabaster", marker = "python_full_version >= '3.12'" },
+    { name = "babel", marker = "python_full_version >= '3.12'" },
+    { name = "colorama", marker = "python_full_version >= '3.12' and sys_platform == 'win32'" },
+    { name = "docutils", version = "0.22.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "imagesize", marker = "python_full_version >= '3.12'" },
+    { name = "jinja2", marker = "python_full_version >= '3.12'" },
+    { name = "packaging", marker = "python_full_version >= '3.12'" },
+    { name = "pygments", marker = "python_full_version >= '3.12'" },
+    { name = "requests", marker = "python_full_version >= '3.12'" },
+    { name = "roman-numerals", marker = "python_full_version >= '3.12'" },
+    { name = "snowballstemmer", marker = "python_full_version >= '3.12'" },
+    { name = "sphinxcontrib-applehelp", marker = "python_full_version >= '3.12'" },
+    { name = "sphinxcontrib-devhelp", marker = "python_full_version >= '3.12'" },
+    { name = "sphinxcontrib-htmlhelp", marker = "python_full_version >= '3.12'" },
+    { name = "sphinxcontrib-jsmath", marker = "python_full_version >= '3.12'" },
+    { name = "sphinxcontrib-qthelp", marker = "python_full_version >= '3.12'" },
+    { name = "sphinxcontrib-serializinghtml", marker = "python_full_version >= '3.12'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/cd/bd/f08eb0f4eed5c83f1ba2a3bd18f7745a2b1525fad70660a1c00224ec468a/sphinx-9.1.0.tar.gz", hash = "sha256:7741722357dd75f8190766926071fed3bdc211c74dd2d7d4df5404da95930ddb", size = 8718324, upload-time = "2025-12-31T15:09:27.646Z" }
 wheels = [
