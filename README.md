@@ -1,4 +1,25 @@
-![pyHanko](docs/images/pyhanko-logo.svg)
+![pyHanko](docs/images.. _api-reference:
+
+*************
+API reference
+*************
+
+This is the API reference for pyHanko, compiled from the docstrings present in
+the Python source files. For a more high-level overview, see the
+:ref:`library user guide <lib-user-guide>`.
+If you are interested in using pyHanko as a command-line application, please
+refer to the :ref:`CLI user guide <cli-user-guide>`.
+
+
+.. warning::
+    Any function, class or method that is *not* covered by this documentation
+    is considered private API by definition.
+
+.. toctree::
+   :maxdepth: 3
+
+   pyhanko
+   pyhanko_certvalidator/pyhanko-logo.svg)
 
 ![Codecov](https://img.shields.io/codecov/c/github/MatthiasValvekens/pyHanko)
 ![pypi (pyHanko)](https://img.shields.io/pypi/v/pyHanko.svg?label=pyHanko)
